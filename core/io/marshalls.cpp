@@ -33,6 +33,7 @@
 #include "core/object/ref_counted.h"
 #include "core/os/keyboard.h"
 #include "core/string/print_string.h"
+#include "core/object/class_db.h"
 
 #include <limits.h>
 #include <stdio.h>

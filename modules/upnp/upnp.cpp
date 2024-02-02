@@ -30,6 +30,8 @@
 
 #include "upnp.h"
 
+#include "core/object/class_db.h"
+
 #include <miniwget.h>
 #include <upnpcommands.h>
 

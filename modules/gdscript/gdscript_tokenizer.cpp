@@ -41,6 +41,12 @@
 #include "editor/editor_settings.h"
 #endif
 
+#ifdef MINGW_ENABLED
+#undef CONST
+#undef IN
+#undef VOID
+#endif
+
 static const char *token_names[] = {
 	"Empty", // EMPTY,
 	// Basic

@@ -30,6 +30,7 @@
 
 #include "object.h"
 
+#include "core/object/class_db.h"
 #include "core/core_string_names.h"
 #include "core/extension/gdextension_manager.h"
 #include "core/io/resource.h"
@@ -63,6 +64,51 @@ struct _ObjectDebugLock {
 #define OBJ_DEBUG_LOCK
 
 #endif
+
+void ClassDBForwarder::_add_class2(const StringName &p_class, const StringName &p_inherits)
+{
+    ::ClassDB::_add_class2(p_class, p_inherits);
+}
+void ClassDBForwarder::add_property_group(const StringName &p_class, const String &p_name, const String &p_prefix, int p_indent_depth)
+{
+    ::ClassDB::add_property_group(p_class, p_name, p_prefix, p_indent_depth);
+}
+void ClassDBForwarder::add_property_subgroup(const StringName &p_class, const String &p_name, const String &p_prefix, int p_indent_depth)
+{
+    ::ClassDB::add_property_subgroup(p_class, p_name, p_prefix, p_indent_depth);
+}
+void ClassDBForwarder::add_property_array_count(const StringName &p_class, const String &p_label, const StringName &p_count_property, const StringName &p_count_setter, const StringName &p_count_getter, const String &p_array_element_prefix, uint32_t p_count_usage)
+{
+    ::ClassDB::add_property_array_count(p_class, p_label, p_count_property, p_count_setter, p_count_getter, p_array_element_prefix, p_count_usage);
+}
+void ClassDBForwarder::add_property_array(const StringName &p_class, const StringName &p_path, const String &p_array_element_prefix)
+{
+    ::ClassDB::add_property_array(p_class, p_path, p_array_element_prefix);
+}
+void ClassDBForwarder::add_property(const StringName &p_class, const PropertyInfo &p_pinfo, const StringName &p_setter, const StringName &p_getter, int p_index)
+{
+    ::ClassDB::add_property(p_class, p_pinfo, p_setter, p_getter, p_index);
+}
+void ClassDBForwarder::add_linked_property(const StringName &p_class, const String &p_property, const String &p_linked_property)
+{
+    ::ClassDB::add_linked_property(p_class, p_property, p_linked_property);
+}
+void ClassDBForwarder::add_signal(const StringName &p_class, const MethodInfo &p_signal)
+{
+    ::ClassDB::add_signal(p_class, p_signal);
+}
+void ClassDBForwarder::add_virtual_method(const StringName &p_class, const MethodInfo &p_method, bool p_virtual, const Vector<String> &p_arg_names, bool p_object_core)
+{
+    ::ClassDB::add_virtual_method(p_class, p_method, p_virtual, p_arg_names, p_object_core);
+}
+void ClassDBForwarder::get_property_list(const StringName &p_class, List<PropertyInfo> *p_list, bool p_no_inheritance, const Object *p_validator)
+{
+    ::ClassDB::get_property_list(p_class, p_list, p_no_inheritance, p_validator);
+}
+void ClassDBForwarder::set_property_default_value(const StringName &p_class, const StringName &p_name, const Variant &p_default)
+{
+    ::ClassDB::set_property_default_value(p_class, p_name, p_default);
+}
 
 PropertyInfo::operator Dictionary() const {
 	Dictionary d;
@@ -1462,7 +1508,7 @@ void Object::initialize_class() {
 	if (initialized) {
 		return;
 	}
-	ClassDB::_add_class<Object>();
+	ClassDB::_add_class2(Object::get_class_static(), Object::get_parent_class_static());
 	_bind_methods();
 	initialized = true;
 }

@@ -31,13 +31,13 @@
 #ifndef STRING_NAME_H
 #define STRING_NAME_H
 
-#include "core/os/mutex.h"
 #include "core/string/ustring.h"
 #include "core/templates/safe_refcount.h"
 
 #define UNIQUE_NODE_PREFIX "%"
 
 class Main;
+class Mutex;
 
 struct StaticCString {
 	const char *ptr;

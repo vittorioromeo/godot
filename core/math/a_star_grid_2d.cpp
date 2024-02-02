@@ -31,6 +31,7 @@
 #include "a_star_grid_2d.h"
 
 #include "core/variant/typed_array.h"
+#include "core/object/class_db.h"
 
 static real_t heuristic_euclidean(const Vector2i &p_from, const Vector2i &p_to) {
 	real_t dx = (real_t)ABS(p_to.x - p_from.x);

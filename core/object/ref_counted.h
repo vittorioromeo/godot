@@ -32,7 +32,7 @@
 #define REF_COUNTED_H
 
 #include "core/object/object.h"
-#include "core/object/class_db.h" // TODO: remove!!! but need to update every GDCLASS usage :(
+//#include "core/object/class_db.h" // TODO: remove!!! but need to update every GDCLASS usage :(
 #include "core/variant/variant.h"
 #include "core/variant/type_info.h"
 #include "core/variant/method_ptrcall.h"

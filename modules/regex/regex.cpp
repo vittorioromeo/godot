@@ -31,6 +31,7 @@
 #include "regex.h"
 
 #include "core/os/memory.h"
+#include "core/object/class_db.h"
 
 extern "C" {
 #include <pcre2.h>

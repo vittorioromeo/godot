@@ -31,6 +31,7 @@
 #include "xml_parser.h"
 
 #include "core/string/print_string.h"
+#include "core/object/class_db.h"
 
 //#define DEBUG_XML
 

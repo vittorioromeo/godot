@@ -35,6 +35,7 @@
 #include "core/object/ref_counted.h"
 #include "core/templates/list.h"
 #include "core/templates/local_vector.h"
+#include "core/variant/binder_common.h"
 
 class AStarGrid2D : public RefCounted {
 	GDCLASS(AStarGrid2D, RefCounted);

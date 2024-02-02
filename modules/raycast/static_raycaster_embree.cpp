@@ -32,6 +32,8 @@
 
 #ifdef TOOLS_ENABLED
 
+#include "core/os/os.h"
+
 #ifdef __SSE2__
 #include <pmmintrin.h>
 #endif

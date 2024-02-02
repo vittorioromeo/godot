@@ -30,6 +30,8 @@
 
 #include "navigation_path_query_parameters_3d.h"
 
+#include "core/object/class_db.h"
+
 void NavigationPathQueryParameters3D::set_pathfinding_algorithm(const NavigationPathQueryParameters3D::PathfindingAlgorithm p_pathfinding_algorithm) {
 	switch (p_pathfinding_algorithm) {
 		case PATHFINDING_ALGORITHM_ASTAR: {

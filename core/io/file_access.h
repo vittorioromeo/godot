@@ -37,6 +37,7 @@
 #include "core/os/memory.h"
 #include "core/string/ustring.h"
 #include "core/typedefs.h"
+#include "core/variant/binder_common.h"
 
 /**
  * Multi-Platform abstraction for accessing to files.

@@ -32,6 +32,8 @@
 
 #include "upnp.h"
 
+#include "core/object/class_db.h"
+
 #include <upnpcommands.h>
 
 String UPNPDevice::query_external_address() const {

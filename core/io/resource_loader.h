@@ -36,6 +36,7 @@
 #include "core/object/worker_thread_pool.h"
 #include "core/os/semaphore.h"
 #include "core/os/thread.h"
+#include "core/os/safe_binary_mutex.h"
 
 class ConditionVariable;
 
