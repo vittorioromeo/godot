@@ -40,8 +40,6 @@
 #include "core/object/callable_method_pointer.h"
 #include "core/templates/hash_set.h"
 
-#include <type_traits>
-
 #define DEFVAL(m_defval) (m_defval)
 
 #ifdef DEBUG_METHODS_ENABLED
@@ -76,6 +74,18 @@ MethodDefinition D_METHOD(const char *p_name, const VarArgs... p_args) {
 #define D_METHOD(m_c, ...) m_c
 
 #endif
+
+namespace godot {
+namespace details {
+
+template <typename, typename>
+inline constexpr bool isSame = false;
+
+template <typename T>
+inline constexpr bool isSame<T, T> = true;
+
+} // namespace details
+} // namespace godot
 
 class ClassDB {
 public:
@@ -188,7 +198,7 @@ public:
 	template <class T>
 	static void register_class(bool p_virtual = false) {
 		GLOBAL_LOCK_FUNCTION;
-		static_assert(TypesAreSame<typename T::self_type, T>::value, "Class not declared properly, please use GDCLASS.");
+		static_assert(typesAreSame<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
 		T::initialize_class();
 		ClassInfo *t = classes.getptr(T::get_class_static());
 		ERR_FAIL_NULL(t);
@@ -203,7 +213,7 @@ public:
 	template <class T>
 	static void register_abstract_class() {
 		GLOBAL_LOCK_FUNCTION;
-		static_assert(TypesAreSame<typename T::self_type, T>::value, "Class not declared properly, please use GDCLASS.");
+		static_assert(typesAreSame<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
 		T::initialize_class();
 		ClassInfo *t = classes.getptr(T::get_class_static());
 		ERR_FAIL_NULL(t);
@@ -216,7 +226,7 @@ public:
 	template <class T>
 	static void register_internal_class() {
 		GLOBAL_LOCK_FUNCTION;
-		static_assert(TypesAreSame<typename T::self_type, T>::value, "Class not declared properly, please use GDCLASS.");
+		static_assert(typesAreSame<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
 		T::initialize_class();
 		ClassInfo *t = classes.getptr(T::get_class_static());
 		ERR_FAIL_NULL(t);
@@ -239,7 +249,7 @@ public:
 	template <class T>
 	static void register_custom_instance_class() {
 		GLOBAL_LOCK_FUNCTION;
-		static_assert(TypesAreSame<typename T::self_type, T>::value, "Class not declared properly, please use GDCLASS.");
+		static_assert(typesAreSame<typename T::self_type, T>, "Class not declared properly, please use GDCLASS.");
 		T::initialize_class();
 		ClassInfo *t = classes.getptr(T::get_class_static());
 		ERR_FAIL_NULL(t);
@@ -296,7 +306,7 @@ public:
 			argptrs[i] = &args[i];
 		}
 		MethodBind *bind = create_method_bind(p_method);
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return bind_methodfi(METHOD_FLAGS_DEFAULT, bind, false, p_method_name, sizeof...(p_args) == 0 ? nullptr : (const Variant **)argptrs, sizeof...(p_args));
@@ -311,7 +321,7 @@ public:
 		}
 		MethodBind *bind = create_static_method_bind(p_method);
 		bind->set_instance_class(p_class);
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return bind_methodfi(METHOD_FLAGS_DEFAULT, bind, false, p_method_name, sizeof...(p_args) == 0 ? nullptr : (const Variant **)argptrs, sizeof...(p_args));
@@ -325,7 +335,7 @@ public:
 			argptrs[i] = &args[i];
 		}
 		MethodBind *bind = create_method_bind(p_method);
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return bind_methodfi(METHOD_FLAGS_DEFAULT, bind, true, p_method_name, sizeof...(p_args) == 0 ? nullptr : (const Variant **)argptrs, sizeof...(p_args));
@@ -340,7 +350,7 @@ public:
 		}
 		MethodBind *bind = create_static_method_bind(p_method);
 		bind->set_instance_class(p_class);
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return bind_methodfi(METHOD_FLAGS_DEFAULT, bind, true, p_method_name, sizeof...(p_args) == 0 ? nullptr : (const Variant **)argptrs, sizeof...(p_args));
@@ -353,7 +363,7 @@ public:
 		MethodBind *bind = create_vararg_method_bind(p_method, p_info, p_return_nil_is_variant);
 		ERR_FAIL_NULL_V(bind, nullptr);
 
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return _bind_vararg_method(bind, p_name, p_default_args, false);
@@ -366,7 +376,7 @@ public:
 		MethodBind *bind = create_vararg_method_bind(p_method, p_info, p_return_nil_is_variant);
 		ERR_FAIL_NULL_V(bind, nullptr);
 
-		if constexpr (std::is_same<typename member_function_traits<M>::return_type, Object *>::value) {
+		if constexpr (godot::details::isSame<typename member_function_traits<M>::return_type, Object *>) {
 			bind->set_return_type_is_raw_object_ptr(true);
 		}
 		return _bind_vararg_method(bind, p_name, p_default_args, true);

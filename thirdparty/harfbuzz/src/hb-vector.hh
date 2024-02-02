@@ -357,7 +357,7 @@ struct hb_vector_t
   shrink_vector (unsigned size)
   {
     assert (size <= length);
-    if (!std::is_trivially_destructible<Type>::value)
+    if (!std::is_trivially_destructible_v<Type>)
     {
       unsigned count = length - size;
       Type *p = arrayZ + length - 1;

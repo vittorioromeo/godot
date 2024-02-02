@@ -40,6 +40,8 @@
 static constexpr uint32_t char_count = ('z' - 'a');
 static constexpr uint32_t base = char_count + ('9' - '0');
 
+GDCLASS_IMPL(ResourceUID, Object)
+
 String ResourceUID::get_cache_file() {
 	return ProjectSettings::get_singleton()->get_project_data_path().path_join("uid_cache.bin");
 }

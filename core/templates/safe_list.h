@@ -36,7 +36,6 @@
 
 #include <atomic>
 #include <functional>
-#include <type_traits>
 
 // Design goals for these classes:
 // - Accessing this list with an iterator will never result in a use-after free,
@@ -141,7 +140,7 @@ public:
 		return end();
 	}
 
-	void erase(T p_value, std::function<void(T)> p_deletion_fn) {
+	void erase(T p_value, const std::function<void(T)>& p_deletion_fn) {
 		Iterator tmp = find(p_value);
 		erase(tmp, p_deletion_fn);
 	}
@@ -151,7 +150,7 @@ public:
 		erase(tmp, [](T t) { return; });
 	}
 
-	void erase(Iterator &p_iterator, std::function<void(T)> p_deletion_fn) {
+	void erase(Iterator &p_iterator, const std::function<void(T)>& p_deletion_fn) {
 		p_iterator.cursor->deletion_fn = p_deletion_fn;
 		erase(p_iterator);
 	}

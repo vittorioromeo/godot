@@ -31,12 +31,13 @@
 #ifndef RESOURCE_UID_H
 #define RESOURCE_UID_H
 
+#include "core/object/object.h"
 #include "core/object/ref_counted.h"
 #include "core/string/string_name.h"
 #include "core/templates/hash_map.h"
 
 class ResourceUID : public Object {
-	GDCLASS(ResourceUID, Object)
+	GDCLASS_DECL(ResourceUID, Object)
 public:
 	typedef int64_t ID;
 	enum {

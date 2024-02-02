@@ -30,7 +30,10 @@
 
 #include "ref_counted.h"
 
+#include "core/object/class_db.h"
 #include "core/object/script_language.h"
+
+GDCLASS_IMPL(RefCounted, Object);
 
 bool RefCounted::init_ref() {
 	if (reference()) {
@@ -98,6 +101,8 @@ RefCounted::RefCounted() :
 	refcount.init();
 	refcount_init.init();
 }
+
+GDCLASS_IMPL(WeakRef, RefCounted);
 
 Variant WeakRef::get_ref() const {
 	if (ref.is_null()) {

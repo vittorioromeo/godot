@@ -31,11 +31,18 @@
 #ifndef REF_COUNTED_H
 #define REF_COUNTED_H
 
-#include "core/object/class_db.h"
+#include "core/object/object.h"
+#include "core/object/class_db.h" // TODO: remove!!! but need to update every GDCLASS usage :(
+#include "core/variant/variant.h"
+#include "core/variant/type_info.h"
+#include "core/variant/method_ptrcall.h"
+#include "core/variant/variant_internal.h"
 #include "core/templates/safe_refcount.h"
 
+class ClassDB;
+
 class RefCounted : public Object {
-	GDCLASS(RefCounted, Object);
+	GDCLASS_DECL(RefCounted, Object);
 	SafeRefCount refcount;
 	SafeRefCount refcount_init;
 
@@ -224,7 +231,7 @@ public:
 };
 
 class WeakRef : public RefCounted {
-	GDCLASS(WeakRef, RefCounted);
+	GDCLASS_DECL(WeakRef, RefCounted);
 
 	ObjectID ref;
 

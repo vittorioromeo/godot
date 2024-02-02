@@ -51,8 +51,6 @@
 #include "servers/display_server.h"
 #include "servers/rendering/rendering_device_commons.h"
 
-#include <algorithm>
-
 class ApiContextRD;
 
 // This may one day be used in Godot for interoperability between C arrays, Vector and LocalVector.
@@ -100,8 +98,25 @@ public:
 // This helps using a single paged allocator for many resource types.
 template <class... RESOURCE_TYPES>
 struct VersatileResourceTemplate {
-	static constexpr size_t RESOURCE_SIZES[] = { sizeof(RESOURCE_TYPES)... };
-	static constexpr size_t MAX_RESOURCE_SIZE = std::max_element(RESOURCE_SIZES, RESOURCE_SIZES + sizeof...(RESOURCE_TYPES))[0];
+
+	template <size_t... VALUES>
+	static constexpr size_t maxOf()
+	{
+		constexpr size_t array[] = { VALUES... };
+		size_t result = array[0];
+
+		for (size_t i = 1; i < sizeof...(VALUES); ++i)
+		{
+			if (array[i] > result)
+			{
+				result = array[i];
+			}
+		}
+
+		return result;
+	}
+
+	static constexpr size_t MAX_RESOURCE_SIZE = maxOf<sizeof(RESOURCE_TYPES)...>();
 	uint8_t data[MAX_RESOURCE_SIZE];
 
 	template <class T>

@@ -138,7 +138,7 @@ struct
 
   template <typename T> constexpr auto
   operator () (hb::shared_ptr<T>& v) const HB_AUTO_RETURN (*v)
-  
+
   template <typename T> constexpr auto
   operator () (const hb::unique_ptr<T>& v) const HB_AUTO_RETURN (*v)
 
@@ -210,7 +210,7 @@ template <> struct hb_int_max<unsigned long long>	: hb_integral_constant<unsigne
 #define hb_is_trivially_copy_assignable(T) std::is_trivially_copy_assignable<T>::value
 #define hb_is_trivially_constructible(T) std::is_trivially_constructible<T>::value
 #define hb_is_trivially_copy_constructible(T) std::is_trivially_copy_constructible<T>::value
-#define hb_is_trivially_destructible(T) std::is_trivially_destructible<T>::value
+#define hb_is_trivially_destructible(T) std::is_trivially_destructible_v<T>
 #endif
 
 /* Class traits. */

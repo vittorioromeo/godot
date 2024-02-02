@@ -293,7 +293,7 @@ static inline bool hb_object_destroy (Type *obj)
 
   hb_object_fini (obj);
 
-  if (!std::is_trivially_destructible<Type>::value)
+  if (!std::is_trivially_destructible_v<Type>)
     obj->~Type ();
 
   return true;

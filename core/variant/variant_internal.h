@@ -32,6 +32,7 @@
 #define VARIANT_INTERNAL_H
 
 #include "variant.h"
+#include "core/templates/simple_type.h"
 
 // For use when you want to access the internal pointer of a Variant directly.
 // Use with caution. You need to be sure that the type is correct.

@@ -570,8 +570,11 @@ def configure_mingw(env):
     if not env["use_llvm"] and not try_cmd("gcc --version", env["mingw_prefix"], env["arch"]):
         env["use_llvm"] = True
 
-    if env["use_llvm"] and not try_cmd("clang --version", env["mingw_prefix"], env["arch"]):
-        env["use_llvm"] = False
+    if env["use_llvm"]:
+        env.Append(CXXFLAGS=["-ftime-trace", "-latomic"])
+
+    # if env["use_llvm"] and not try_cmd("clang --version", env["mingw_prefix"], env["arch"]):
+    #     env["use_llvm"] = False
 
     # TODO: Re-evaluate the need for this / streamline with common config.
     if env["target"] == "template_release":
@@ -608,8 +611,8 @@ def configure_mingw(env):
     mingw_bin_prefix = get_mingw_bin_prefix(env["mingw_prefix"], env["arch"])
 
     if env["use_llvm"]:
-        env["CC"] = mingw_bin_prefix + "clang"
-        env["CXX"] = mingw_bin_prefix + "clang++"
+        env["CC"] = "clang"
+        env["CXX"] = "clang++"
         if try_cmd("as --version", env["mingw_prefix"], env["arch"]):
             env["AS"] = mingw_bin_prefix + "as"
         if try_cmd("ar --version", env["mingw_prefix"], env["arch"]):
