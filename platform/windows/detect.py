@@ -572,6 +572,7 @@ def configure_mingw(env):
 
     if env["use_llvm"]:
         env.Append(CXXFLAGS=["-ftime-trace", "-latomic"])
+        env.Append(LINKFLAGS=["-latomic"])
 
     # if env["use_llvm"] and not try_cmd("clang --version", env["mingw_prefix"], env["arch"]):
     #     env["use_llvm"] = False
