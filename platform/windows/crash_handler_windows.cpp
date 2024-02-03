@@ -40,8 +40,6 @@
 
 // Backtrace code based on: https://stackoverflow.com/questions/6205981/windows-c-stack-trace-from-a-running-app
 
-#include <algorithm>
-#include <iterator>
 #include <string>
 #include <vector>
 
@@ -87,32 +85,24 @@ public:
 	}
 };
 
-class get_mod_info {
-	HANDLE process;
+module_data get_mod_info(HANDLE process, HMODULE module) {
+	module_data ret;
+	char temp[4096];
+	MODULEINFO mi;
 
-public:
-	get_mod_info(HANDLE h) :
-			process(h) {}
+	GetModuleInformation(process, module, &mi, sizeof(mi));
+	ret.base_address = mi.lpBaseOfDll;
+	ret.load_size = mi.SizeOfImage;
 
-	module_data operator()(HMODULE module) {
-		module_data ret;
-		char temp[4096];
-		MODULEINFO mi;
-
-		GetModuleInformation(process, module, &mi, sizeof(mi));
-		ret.base_address = mi.lpBaseOfDll;
-		ret.load_size = mi.SizeOfImage;
-
-		GetModuleFileNameEx(process, module, temp, sizeof(temp));
-		ret.image_name = temp;
-		GetModuleBaseName(process, module, temp, sizeof(temp));
-		ret.module_name = temp;
-		std::vector<char> img(ret.image_name.begin(), ret.image_name.end());
-		std::vector<char> mod(ret.module_name.begin(), ret.module_name.end());
-		SymLoadModule64(process, 0, &img[0], &mod[0], (DWORD64)ret.base_address, ret.load_size);
-		return ret;
-	}
-};
+	GetModuleFileNameEx(process, module, temp, sizeof(temp));
+	ret.image_name = temp;
+	GetModuleBaseName(process, module, temp, sizeof(temp));
+	ret.module_name = temp;
+	std::vector<char> img(ret.image_name.begin(), ret.image_name.end());
+	std::vector<char> mod(ret.module_name.begin(), ret.module_name.end());
+	SymLoadModule64(process, 0, &img[0], &mod[0], (DWORD64)ret.base_address, ret.load_size);
+	return ret;
+}
 
 DWORD CrashHandlerException(EXCEPTION_POINTERS *ep) {
 	HANDLE process = GetCurrentProcess();
@@ -158,7 +148,11 @@ DWORD CrashHandlerException(EXCEPTION_POINTERS *ep) {
 	EnumProcessModules(process, &module_handles[0], module_handles.size() * sizeof(HMODULE), &cbNeeded);
 	module_handles.resize(cbNeeded / sizeof(HMODULE));
 	EnumProcessModules(process, &module_handles[0], module_handles.size() * sizeof(HMODULE), &cbNeeded);
-	std::transform(module_handles.begin(), module_handles.end(), std::back_inserter(modules), get_mod_info(process));
+
+	for (HMODULE module_handle : module_handles) {
+		modules.push_back(get_mod_info(process, module_handle));
+	}
+
 	void *base = modules[0].base_address;
 
 	// Setup stuff:
